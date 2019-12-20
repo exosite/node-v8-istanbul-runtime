@@ -1,0 +1,23 @@
+{
+  "name": "INT-coverage",
+  "version": "0.1.0",
+  "description": "Tiny coverage module return runtime coverage",
+  "main": "index.js",
+  "author": "renaudsauvain@exosite.com",
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "coverage",
+    "v8",
+    "istanbul",
+    "runtime"
+  ],
+  "dependencies": {
+    "v8-to-istanbul": "^4.0.0",
+    "istanbul-lib-coverage": "^2.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/exosite/node-v8-istanbul-runtime.git"
+  }
+}
