@@ -9,7 +9,7 @@ Then add the module and optionally pass the express router to it.
 
 ```javascript
 // Enable coverage routes
-const Coverage = require('INT-coverage');
+const Coverage = require('node-v8-istanbul-runtime');
 // eslint-disable-next-line no-new
 new Coverage(express_app);
 ```
