@@ -20,17 +20,19 @@ new Coverage(express_app);
 const coverage = new Coverage();
 coverage.stop(); // stop the session
 coverage.start(); // start a new session & close existing if any
-const details = coverage.get(); // get Istanbul coverage
-console.log(coverage.summarize()); // get & print summary, use the last generated reports by default
+const report = coverage.get(); // get Istanbul coverage
+console.log(coverage.summarize(report)); // get & print summary, use the last generated reports by default
+console.log(coverage.summarize(report, true)); // Also keep the full details
 ```
 
 ### Web Endpoints
 
 If the express route is passed to the constructor follow 3 routes are added:
 
-**GET /coverage**
+**GET /coverage?full=true**
 
 Get the current coverage summary.
+Optional _full_ query parameter to get the full report.
 
 **POST /coverage**
 

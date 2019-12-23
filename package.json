@@ -2,7 +2,6 @@
   "name": "INT-coverage",
   "version": "0.1.0",
   "description": "Tiny coverage module return runtime coverage",
-  "main": "index.js",
   "author": "renaudsauvain@exosite.com",
   "license": "MIT",
   "private": true,
@@ -12,6 +11,10 @@
     "istanbul",
     "runtime"
   ],
+  "main": "index.js",
+  "scripts": {
+    "test": "COVERAGE=true node test.js"
+  },
   "dependencies": {
     "v8-to-istanbul": "^4.0.0",
     "istanbul-lib-coverage": "^2.0.5"

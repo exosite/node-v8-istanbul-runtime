@@ -18,7 +18,6 @@ if (process.env.COVERAGE !== 'true') {
     constructor (express) {
       inspector.open(0, true);
       this.session = new inspector.Session();
-      this.start();
       if (express) {
         // Enable coverage endpoints under /coverage
         express.use('/coverage', (req, res) =>
@@ -27,8 +26,8 @@ if (process.env.COVERAGE !== 'true') {
       }
     }
 
-    async expressGET (request, response) {
-      const result = this.summarize(await this.get());
+    async expressGET ({ query: { full } }, response) {
+      const result = this.summarize(await this.get(), full === 'true');
       response.status(200).json(result);
     }
     async expressPOST (request, response) {
@@ -36,13 +35,13 @@ if (process.env.COVERAGE !== 'true') {
       response.status(204).send();
     }
     async expressDELETE (request, response) {
-      const result = this.summarize(await this.get());
+      const result = this.summarize(await this.get(), full === 'true');
       await this.stop();
       response.status(200).json(result);
     }
 
     async start () {
-      this.stop();
+      await this.stop();
       this.session.connect();
       await this.postPromise('Profiler.enable');
       await this.postPromise('Runtime.enable');
@@ -67,27 +66,31 @@ if (process.env.COVERAGE !== 'true') {
         .filter(file =>
           path.isAbsolute(file.url.replace('file://', '')) && !file.url.includes('node_modules'));
 
-      const coverage = [];
+      const coverage = {};
       for (const { url, functions } of result) {
         const reportFormatted = v8ToIstanbul(url);
         await reportFormatted.load(); // this is required due to the async source-map dependency.
         reportFormatted.applyCoverage(functions);
-        coverage.push(reportFormatted.toIstanbul());
+        const fileCoverage = reportFormatted.toIstanbul();
+        for (const f in fileCoverage) {
+          coverage[f.replace(appFolder, '')] = fileCoverage[f];
+        }
       }
       this.lastCoverage = coverage;
       return coverage;
     }
 
-    summarize (reports = this.lastCoverage) {
-      const joined = reports.reduce((acc, report) => Object.assign(acc, report), {});
-      const map = libCoverage.createCoverageMap(joined);
+    summarize (reports = this.lastCoverage, full) {
+      const map = libCoverage.createCoverageMap(reports);
       const summary = libCoverage.createCoverageSummary();
-      const result = { summary };
+      const result = full ? reports : {};
+      result.summary = summary.data;
       for (let f of map.files()) {
         const fc = map.fileCoverageFor(f);
         const s = fc.toSummary();
         summary.merge(s);
-        result[f.replace(appFolder, '')] = s;
+        if (result[f]) Object.assign(result[f], s.data);
+        else result[f] = s.data;
       }
       return result;
     }
