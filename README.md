@@ -18,11 +18,11 @@ new Coverage(express_app);
 
 ```javascript
 const coverage = new Coverage();
-coverage.stop(); // stop the session
 coverage.start(); // start a new session & close existing if any
 const report = coverage.get(); // get Istanbul coverage
 console.log(coverage.summarize(report)); // get & print summary, use the last generated reports by default
 console.log(coverage.summarize(report, true)); // Also keep the full details
+coverage.stop(); // stop the session
 ```
 
 ### Web Endpoints

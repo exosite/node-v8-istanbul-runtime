@@ -1,6 +1,6 @@
 {
   "name": "node-v8-istanbul-runtime",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Tiny coverage module return runtime coverage",
   "author": "renaudsauvain@exosite.com",
   "license": "MIT",

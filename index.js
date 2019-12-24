@@ -23,6 +23,7 @@ if (process.env.COVERAGE !== 'true') {
         express.use('/coverage', (req, res) =>
           this['express' + req.method](req, res)
             .catch(error => res.status(500).send(error)));
+        this.start();
       }
     }
 
