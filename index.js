@@ -35,7 +35,7 @@ if (process.env.COVERAGE !== 'true') {
       await this.start();
       response.status(204).send();
     }
-    async expressDELETE (request, response) {
+    async expressDELETE ({ query: { full } }, response) {
       const result = this.summarize(await this.get(), full === 'true');
       await this.stop();
       response.status(200).json(result);
